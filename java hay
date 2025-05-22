@@ -1,200 +1,116 @@
-///Functional Interface Sorter với Lambda Expression
-import java.util.Arrays;
+CREATE DATABASE NguyenVanA_123456;
+USE NguyenVanA_123456;
 
-@FunctionalInterface
-interface Sorter {
-    void sort(int[] arr);
-}
+-- Tạo bảng DMLOP
+CREATE TABLE DMLOP (
+    NAMHOC INT,
+    MALOP VARCHAR(10) PRIMARY KEY,
+    TENLOP NVARCHAR(50),
+    KHOI INT,
+    GVCN NVARCHAR(50)
+);
 
-public class Main {
-    public static void main(String[] args) {
-        // Tạo Functional Interface với lambda expression để sắp xếp tăng dần
-        Sorter sorter = arr -> Arrays.sort(arr);
-        
-        // Khởi tạo mảng
-        int[] arr = {4, 2, 7, 1, 9, 5};
-        
-        // Gọi phương thức sort()
-        sorter.sort(arr);
-        
-        // In ra mảng sau khi sắp xếp
-        System.out.println("Mảng sau khi sắp xếp: " + Arrays.toString(arr));
-    }
-}
-///Thao tác với LinkedList
-import java.util.LinkedList;
-import java.util.Random;
+-- Tạo bảng HOCSINH
+CREATE TABLE HOCSINH (
+    MAHS VARCHAR(10) PRIMARY KEY,
+    HOTEN NVARCHAR(50),
+    NGAYSINH DATE,
+    GIOITINH NVARCHAR(10),
+    NAMHOC INT,
+    MALOP VARCHAR(10)
+);
 
-public class Main {
-    public static void main(String[] args) {
-        // Tạo LinkedList chứa 8 phần tử ngẫu nhiên < 100
-        LinkedList<Integer> list = new LinkedList<>();
-        Random random = new Random();
-        
-        for (int i = 0; i < 8; i++) {
-            list.add(random.nextInt(100));
-        }
-        System.out.println("Danh sách ban đầu: " + list);
-        
-        // Thêm phần tử 25 vào vị trí số 2
-        list.add(2, 25);
-        System.out.println("Sau khi thêm 25 vào vị trí 2: " + list);
-        
-        // Xóa phần tử có giá trị < 30
-        list.removeIf(n -> n < 30);
-        System.out.println("Sau khi xóa phần tử < 30: " + list);
-        
-        // Tìm và in ra vị trí của phần tử có giá trị từ 40 đến 80
-        System.out.print("Vị trí các phần tử có giá trị từ 40-80: ");
-        for (int i = 0; i < list.size(); i++) {
-            int value = list.get(i);
-            if (value >= 40 && value <= 80) {
-                System.out.print(i + " ");
-            }
-        }
-    }
-}
-///Lập trình đa luồng với 2 Thread
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Random;
+-- Tạo bảng MONHOC
+CREATE TABLE MONHOC (
+    MAMH VARCHAR(10) PRIMARY KEY,
+    TENMH NVARCHAR(50),
+    HESO INT,
+    GHICHU NVARCHAR(100)
+);
 
-public class Main {
-    public static void main(String[] args) {
-        // Thread 1: Hiển thị thời gian mỗi giây
-        Thread thread1 = new Thread(() -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            while (true) {
-                System.out.println("Thời gian hiện tại: " + LocalTime.now().format(formatter));
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        
-        // Thread 2: Sinh số ngẫu nhiên từ 1-100 (chạy 1 lần)
-        Thread thread2 = new Thread(() -> {
-            Random random = new Random();
-            int randomNumber = random.nextInt(100) + 1;
-            System.out.println("Số ngẫu nhiên: " + randomNumber);
-        });
-        
-        // Khởi động các thread
-        thread1.start();
-        thread2.start();
-    }
-}
-///Ghi và đọc file với DataOutputStream/DataInputStream
-import java.io.*;
+-- Tạo bảng NHAPDIEM
+CREATE TABLE NHAPDIEM (
+    KYHOC VARCHAR(10),
+    MAHS VARCHAR(10),
+    MAMH VARCHAR(10),
+    DIEM1 FLOAT,
+    DIEM2 FLOAT,
+    DIEM3 FLOAT,
+    TBMON FLOAT,
+    PRIMARY KEY (KYHOC, MAHS, MAMH)
+);
 
-public class Main {
-    public static void main(String[] args) {
-        // Ghi 4 số nguyên vào file
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("int.txt"))) {
-            dos.writeInt(10);
-            dos.writeInt(20);
-            dos.writeInt(30);
-            dos.writeInt(40);
-            System.out.println("Đã ghi 4 số nguyên vào file int.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+-- Nhập dữ liệu vào bảng DMLOP
+INSERT INTO DMLOP VALUES (2024, '10A1', N'Lớp 10A1', 10, N'Nguyễn Văn A');
+INSERT INTO DMLOP VALUES (2024, '10A2', N'Lớp 10A2', 10, N'Phạm Thị B');
+INSERT INTO DMLOP VALUES (2024, '11A1', N'Lớp 11A1', 11, N'Trần Văn C');
 
-        // Đọc lại 4 số nguyên từ file
-        try (DataInputStream dis = new DataInputStream(new FileInputStream("int.txt"))) {
-            int num1 = dis.readInt();
-            int num2 = dis.readInt();
-            int num3 = dis.readInt();
-            int num4 = dis.readInt();
-            
-            // Tính tổng 2 số đầu
-            int sumFirstTwo = num1 + num2;
-            
-            // Tính tổng tất cả các số
-            int totalSum = num1 + num2 + num3 + num4;
-            
-            System.out.println("Các số đọc được: " + num1 + ", " + num2 + ", " + num3 + ", " + num4);
-            System.out.println("Tổng 2 số đầu: " + sumFirstTwo);
-            System.out.println("Tổng tất cả các số: " + totalSum);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-///Interface IShape với các lớp Circle và Rectangle
-interface IShape {
-    double PI = 3.1416; // Hằng số
-    
-    void showInfo();
-    double getArea();
-    double getPerimeter();
-}
+-- Nhập dữ liệu vào bảng HOCSINH
+INSERT INTO HOCSINH VALUES ('HS01', N'Lê Văn Hùng', '2008-01-01', N'Nam', 2024, '10A1');
+INSERT INTO HOCSINH VALUES ('HS02', N'Nguyễn Thị Mai', '2008-03-05', N'Nữ', 2024, '10A1');
+INSERT INTO HOCSINH VALUES ('HS03', N'Trần Văn An', '2007-06-12', N'Nam', 2024, '10A2');
+INSERT INTO HOCSINH VALUES ('HS04', N'Phạm Thị Hoa', '2007-11-20', N'Nữ', 2024, '11A1');
 
-class Circle implements IShape {
-    private double radius;
-    
-    public Circle(double radius) {
-        this.radius = radius;
-    }
-    
-    @Override
-    public double getArea() {
-        return PI * radius * radius;
-    }
-    
-    @Override
-    public double getPerimeter() {
-        return 2 * PI * radius;
-    }
-    
-    @Override
-    public void showInfo() {
-        System.out.println("Hình tròn - Bán kính: " + radius);
-        System.out.println("Diện tích: " + getArea());
-        System.out.println("Chu vi: " + getPerimeter());
-    }
-}
+-- Nhập dữ liệu vào bảng MONHOC
+INSERT INTO MONHOC VALUES ('MH01', N'Toán', 2, NULL);
+INSERT INTO MONHOC VALUES ('MH02', N'Văn', 2, NULL);
+INSERT INTO MONHOC VALUES ('MH03', N'Anh', 1, NULL);
 
-class Rectangle implements IShape {
-    private double width;
-    private double length;
-    
-    public Rectangle(double width, double length) {
-        this.width = width;
-        this.length = length;
-    }
-    
-    @Override
-    public double getArea() {
-        return width * length;
-    }
-    
-    @Override
-    public double getPerimeter() {
-        return 2 * (width + length);
-    }
-    
-    @Override
-    public void showInfo() {
-        System.out.println("Hình chữ nhật - Chiều rộng: " + width + ", Chiều dài: " + length);
-        System.out.println("Diện tích: " + getArea());
-        System.out.println("Chu vi: " + getPerimeter());
-    }
-}
+-- Nhập dữ liệu vào bảng NHAPDIEM
+INSERT INTO NHAPDIEM VALUES ('HK1', 'HS01', 'MH01', 7, 8, 9, (7*1 + 8*2 + 9*3)/6.0);
+INSERT INTO NHAPDIEM VALUES ('HK1', 'HS02', 'MH01', 6, 7, 8, (6*1 + 7*2 + 8*3)/6.0);
+INSERT INTO NHAPDIEM VALUES ('HK1', 'HS03', 'MH02', 5, 6, 7, (5*1 + 6*2 + 7*3)/6.0);
+INSERT INTO NHAPDIEM VALUES ('HK1', 'HS04', 'MH03', 8, 8, 9, (8*1 + 8*2 + 9*3)/6.0);
+---
+CREATE VIEW V_SOHOCSINH_KHOI_2024
+(KHOI, SOLUONG)
+AS
+SELECT DMLOP.KHOI, COUNT(*) AS SOLUONG
+FROM DMLOP, HOCSINH
+WHERE DMLOP.MALOP = HOCSINH.MALOP AND HOCSINH.NAMHOC = 2024
+GROUP BY DMLOP.KHOI;
 
-public class Main {
-    public static void main(String[] args) {
-        // Tạo đối tượng Circle và Rectangle
-        Circle circle = new Circle(25.5);
-        Rectangle rectangle = new Rectangle(5, 12);
-        
-        // Gọi phương thức showInfo()
-        System.out.println("Thông tin hình tròn:");
-        circle.showInfo();
-        
-        System.out.println("\nThông tin hình chữ nhật:");
-        rectangle.showInfo();
-    }
-}
+SELECT * FROM V_SOHOCSINH_KHOI_2024;
+EXEC sp_help V_SOHOCSINH_KHOI_2024;
+---
+CREATE VIEW V_DIEMCHITIET_2024
+(MAHS, HOTEN, NGAYSINH, GIOITINH, MALOP, KYHOC, MAMH, TENMH, DIEM1, DIEM2, DIEM3, TBMON)
+AS
+SELECT HOCSINH.MAHS, HOCSINH.HOTEN, HOCSINH.NGAYSINH, HOCSINH.GIOITINH, 
+       HOCSINH.MALOP, NHAPDIEM.KYHOC, NHAPDIEM.MAMH,
+       MONHOC.TENMH, NHAPDIEM.DIEM1, NHAPDIEM.DIEM2, NHAPDIEM.DIEM3, NHAPDIEM.TBMON
+FROM HOCSINH, NHAPDIEM, MONHOC
+WHERE HOCSINH.MAHS = NHAPDIEM.MAHS
+  AND NHAPDIEM.MAMH = MONHOC.MAMH
+  AND HOCSINH.NAMHOC = 2024;
+
+SELECT * FROM V_DIEMCHITIET_2024;
+EXEC sp_help V_DIEMCHITIET_2024;
+----
+SELECT TOP 1 MALOP, COUNT(*) AS SOLUONG
+FROM HOCSINH
+WHERE NAMHOC = 2024
+GROUP BY MALOP
+ORDER BY SOLUONG DESC;
+---
+CREATE PROCEDURE THONGKE_HOCSINH_2024
+    @LOAI INT
+AS
+BEGIN
+    IF @LOAI = 1
+    BEGIN
+        SELECT DMLOP.KHOI, COUNT(*) AS SOLUONG
+        FROM DMLOP, HOCSINH
+        WHERE DMLOP.MALOP = HOCSINH.MALOP
+              AND HOCSINH.NAMHOC = 2024
+        GROUP BY DMLOP.KHOI;
+    END
+
+    IF @LOAI = 2
+    BEGIN
+        SELECT HOCSINH.MALOP, COUNT(*) AS SOLUONG
+        FROM HOCSINH
+        WHERE HOCSINH.NAMHOC = 2024
+        GROUP BY HOCSINH.MALOP;
+    END
+END
